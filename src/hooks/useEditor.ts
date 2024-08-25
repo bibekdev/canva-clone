@@ -1,13 +1,44 @@
+'use client';
+
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { fabric } from 'fabric';
 
+import { buildEditor } from '@/lib/editors/build-editor';
 import { useAutoResize } from './useAutoResize';
+import { useCanvasEvents } from './useCanvasEvents';
+import { FILL_COLOR, STROKE_COLOR, STROKE_WIDTH } from '@/lib/types';
 
 export const useEditor = () => {
   const [canvas, setCanvas] = useState<fabric.Canvas | null>(null);
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
+  const [selectedObjects, setSelectedObjects] = useState<fabric.Object[]>([]);
+
+  const [fillColor, setFillColor] = useState(FILL_COLOR);
+  const [strokeColor, setStrokeColor] = useState(STROKE_COLOR);
+  const [strokeWidth, setStrokeWidth] = useState(STROKE_WIDTH);
 
   useAutoResize({ container, canvas });
+
+  const editor = useMemo(() => {
+    if (canvas) {
+      return buildEditor({
+        canvas,
+        fillColor,
+        strokeColor,
+        strokeWidth,
+        setFillColor,
+        setStrokeColor,
+        setStrokeWidth
+      });
+    }
+    return undefined;
+  }, [canvas, fillColor, strokeColor, strokeWidth]);
+
+  useCanvasEvents({
+    canvas,
+    setSelectedObjects,
+    container
+  });
 
   const init = useCallback(
     ({
@@ -18,7 +49,7 @@ export const useEditor = () => {
       initialContainer: HTMLDivElement;
     }) => {
       fabric.Object.prototype.set({
-        cornerColor: '#fff',
+        cornerColor: '#ffffff',
         cornerStyle: 'circle',
         borderColor: '#8b3dff',
         borderScaleFactor: 1.5,
@@ -28,10 +59,10 @@ export const useEditor = () => {
       });
 
       const initialWorkspace = new fabric.Rect({
-        width: 900,
+        width: 800,
         height: 1200,
         name: 'clip',
-        fill: 'white',
+        fill: '#ffffff',
         selectable: false,
         hasControls: false,
         shadow: new fabric.Shadow({
@@ -42,6 +73,7 @@ export const useEditor = () => {
 
       initialCanvas.setWidth(initialContainer.offsetWidth);
       initialCanvas.setHeight(initialContainer.offsetHeight);
+
       initialCanvas.add(initialWorkspace);
       initialCanvas.centerObject(initialWorkspace);
       initialCanvas.clipPath = initialWorkspace;
@@ -52,5 +84,5 @@ export const useEditor = () => {
     []
   );
 
-  return { init };
+  return { init, editor };
 };

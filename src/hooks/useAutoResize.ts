@@ -24,9 +24,9 @@ export const useAutoResize = ({ canvas, container }: Props) => {
       .find(object => object.name === 'clip');
 
     // @ts-ignore
-    const scale = fabric.util.findScaleToCover(localWorkspace, {
-      width,
-      height
+    const scale = fabric.util.findScaleToFit(localWorkspace, {
+      width: width,
+      height: height
     });
 
     const zoom = zoomRatio * scale;
@@ -49,6 +49,7 @@ export const useAutoResize = ({ canvas, container }: Props) => {
 
     viewportTransform[4] =
       canvas.width / 2 - workspaceCenter.x * viewportTransform[0];
+
     viewportTransform[5] =
       canvas.height / 2 - workspaceCenter.y * viewportTransform[3];
 
@@ -69,13 +70,13 @@ export const useAutoResize = ({ canvas, container }: Props) => {
       });
 
       resizeObserver.observe(container);
-
-      return () => {
-        if (resizeObserver) {
-          resizeObserver.disconnect();
-        }
-      };
     }
+
+    return () => {
+      if (resizeObserver) {
+        resizeObserver.disconnect();
+      }
+    };
   }, [canvas, container, autoZoom]);
 
   return { autoZoom };
