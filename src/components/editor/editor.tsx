@@ -5,7 +5,9 @@ import { fabric } from 'fabric';
 
 import { useEditor } from '@/hooks';
 import { ActiveTool, selectionDependentTools } from '@/lib/types';
+import { DrawSidebar } from './sidebar/draw-sidebar';
 import FillColorSidebar from './sidebar/fill-color-sidebar';
+import { FilterSidebar } from './sidebar/filter-sidebar';
 import { FontSidebar } from './sidebar/font-sidebar';
 import { ImageSidebar } from './sidebar/image-sidebar';
 import { OpacitySidebar } from './sidebar/opacity-sidebar';
@@ -35,12 +37,20 @@ export function Editor() {
 
   const onChangeActiveTool = useCallback(
     (tool: ActiveTool) => {
+      if (tool === 'draw') {
+        editor?.enableDrawingMode();
+      }
+
+      if (activeTool === 'draw') {
+        editor?.disableDrawingMode();
+      }
+
       if (tool === activeTool) return setActiveTool('select');
 
       setActiveTool(tool);
     },
 
-    [activeTool]
+    [activeTool, editor]
   );
 
   useEffect(() => {
@@ -103,6 +113,16 @@ export function Editor() {
           onChangeActiveTool={onChangeActiveTool}
         />
         <ImageSidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={onChangeActiveTool}
+        />
+        <FilterSidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={onChangeActiveTool}
+        />
+        <DrawSidebar
           editor={editor}
           activeTool={activeTool}
           onChangeActiveTool={onChangeActiveTool}

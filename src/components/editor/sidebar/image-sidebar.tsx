@@ -7,6 +7,7 @@ import { ToolSidebarClose } from '@/components/editor/tool-sidebar-close';
 import { ToolSidebarHeader } from '@/components/editor/tool-sidebar-header';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { ActiveTool, Editor } from '@/lib/types';
+import { UploadButton } from '@/lib/uploadthing';
 import { cn } from '@/lib/utils';
 
 type Props = {
@@ -37,19 +38,19 @@ export const ImageSidebar = ({
         description='Add images to your canvas'
       />
       <div className='border-b p-4'>
-        {/* <UploadButton
-        appearance={{
-          button: "w-full text-sm font-medium",
-          allowedContent: "hidden"
-        }}
-        content={{
-          button: "Upload Image"
-        }}
-        endpoint="imageUploader"
-        onClientUploadComplete={(res) => {
-          editor?.addImage(res[0].url);
-        }}
-      /> */}
+        <UploadButton
+          appearance={{
+            button: 'w-full text-sm font-medium bg-primary',
+            allowedContent: 'hidden'
+          }}
+          content={{
+            button: 'Upload Image'
+          }}
+          endpoint='imageUploader'
+          onClientUploadComplete={res => {
+            editor?.addImage(res[0].url);
+          }}
+        />
       </div>
       {isLoading && (
         <div className='flex flex-1 items-center justify-center'>
@@ -71,7 +72,7 @@ export const ImageSidebar = ({
               data.map(image => {
                 return (
                   <button
-                    // onClick={() => editor?.addImage(image.urls.regular)}
+                    onClick={() => editor?.addImage(image.urls.regular)}
                     key={image.id}
                     className='group relative h-[100px] w-full overflow-hidden rounded-sm border bg-muted transition hover:opacity-75'>
                     <Image

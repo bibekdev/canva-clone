@@ -2,6 +2,43 @@ import { Dispatch, SetStateAction } from 'react';
 import { ITextboxOptions } from 'fabric/fabric-impl';
 import * as material from 'material-colors';
 
+export const JSON_KEYS = [
+  'name',
+  'gradientAngle',
+  'selectable',
+  'hasControls',
+  'linkData',
+  'editable',
+  'extensionType',
+  'extension'
+];
+
+export const filters = [
+  'none',
+  'polaroid',
+  'sepia',
+  'kodachrome',
+  'contrast',
+  'brightness',
+  'greyscale',
+  'brownie',
+  'vintage',
+  'technicolor',
+  'pixelate',
+  'invert',
+  'blur',
+  'sharpen',
+  'emboss',
+  'removecolor',
+  'blacknwhite',
+  'vibrance',
+  'blendcolor',
+  'huerotate',
+  'resize',
+  'saturation',
+  'gamma'
+];
+
 export const fonts = [
   'Arial',
   'Arial Black',
@@ -150,8 +187,8 @@ export type BuildEditorProps = {
   // canUndo: () => boolean;
   // canRedo: () => boolean;
   // autoZoom: () => void;
-  // copy: () => void;
-  // paste: () => void;
+  copy: () => void;
+  paste: () => void;
   canvas: fabric.Canvas;
   fillColor: string;
   strokeColor: string;
@@ -182,12 +219,12 @@ export interface Editor {
   // getWorkspace: () => fabric.Object | undefined;
   // changeBackground: (value: string) => void;
   // changeSize: (value: { width: number; height: number }) => void;
-  // enableDrawingMode: () => void;
-  // disableDrawingMode: () => void;
-  // onCopy: () => void;
-  // onPaste: () => void;
-  // changeImageFilter: (value: string) => void;
-  // addImage: (value: string) => void;
+  enableDrawingMode: () => void;
+  disableDrawingMode: () => void;
+  onCopy: () => void;
+  onPaste: () => void;
+  changeImageFilter: (value: string) => void;
+  addImage: (value: string) => void;
   delete: () => void;
   changeFontSize: (value: number) => void;
   getActiveFontSize: () => number;

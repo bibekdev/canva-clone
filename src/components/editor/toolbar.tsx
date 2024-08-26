@@ -6,16 +6,18 @@ import {
   ArrowDown,
   ArrowUp,
   ChevronDown,
+  Copy,
   Trash
 } from 'lucide-react';
 import { BsBorderWidth } from 'react-icons/bs';
+import { FaBold, FaItalic, FaStrikethrough, FaUnderline } from 'react-icons/fa';
 import { RxTransparencyGrid } from 'react-icons/rx';
+import { TbColorFilter } from 'react-icons/tb';
 
+import { Hint } from '@/components/common/hint';
+import { Button } from '@/components/ui/button';
 import { ActiveTool, Editor, FONT_SIZE, FONT_WEIGHT } from '@/lib/types';
 import { cn, isTextType } from '@/lib/utils';
-import { Hint } from '../common/hint';
-import { Button } from '../ui/button';
-import { FaBold, FaItalic, FaStrikethrough, FaUnderline } from 'react-icons/fa';
 import { FontSizeInput } from './font-size-input';
 
 type Props = {
@@ -321,6 +323,20 @@ export function Toolbar({ activeTool, onChangeActiveTool, editor }: Props) {
         </div>
       )}
 
+      {isImage && (
+        <div className='flex h-full items-center justify-center'>
+          <Hint label='Filters' side='bottom' sideOffset={5}>
+            <Button
+              onClick={() => onChangeActiveTool('filter')}
+              size='icon'
+              variant='ghost'
+              className={cn(activeTool === 'filter' && 'bg-gray-100')}>
+              <TbColorFilter className='size-4' />
+            </Button>
+          </Hint>
+        </div>
+      )}
+
       <div className='flex h-full items-center justify-center'>
         <Hint label='Send forward' side='bottom' sideOffset={5}>
           <Button
@@ -353,6 +369,20 @@ export function Toolbar({ activeTool, onChangeActiveTool, editor }: Props) {
             variant='ghost'
             className={cn(activeTool === 'opacity' && 'bg-gray-100')}>
             <RxTransparencyGrid className='size-4' />
+          </Button>
+        </Hint>
+      </div>
+
+      <div className='flex h-full items-center justify-center'>
+        <Hint label='Duplicate' side='bottom' sideOffset={5}>
+          <Button
+            onClick={() => {
+              editor?.onCopy();
+              editor?.onPaste();
+            }}
+            size='icon'
+            variant='ghost'>
+            <Copy className='size-4' />
           </Button>
         </Hint>
       </div>

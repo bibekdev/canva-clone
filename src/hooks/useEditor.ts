@@ -12,6 +12,7 @@ import {
   STROKE_DASH_ARRAY,
   STROKE_WIDTH
 } from '@/lib/types';
+import { useClipboard } from './use-clipboard';
 import { useAutoResize } from './useAutoResize';
 import { useCanvasEvents } from './useCanvasEvents';
 
@@ -29,9 +30,13 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
 
   useAutoResize({ container, canvas });
 
+  const { copy, paste } = useClipboard({ canvas });
+
   const editor = useMemo(() => {
     if (canvas) {
       return buildEditor({
+        copy,
+        paste,
         canvas,
         fillColor,
         strokeColor,
@@ -53,7 +58,10 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
     strokeColor,
     strokeWidth,
     selectedObjects,
-    strokeDashArray
+    strokeDashArray,
+    copy,
+    paste,
+    fontFamily
   ]);
 
   useCanvasEvents({

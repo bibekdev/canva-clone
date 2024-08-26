@@ -11,7 +11,7 @@ import {
   TEXT_OPTIONS,
   TRIANGLE_OPTIONS
 } from '@/lib/types';
-import { isTextType } from '@/lib/utils';
+import { createFilter, isTextType } from '@/lib/utils';
 
 export const buildEditor = ({
   canvas,
@@ -25,7 +25,9 @@ export const buildEditor = ({
   strokeDashArray,
   setStrokeDashArray,
   fontFamily,
-  setFontFamily
+  setFontFamily,
+  copy,
+  paste
 }: BuildEditorProps): Editor => {
   const getWorkspace = () => {
     return canvas.getObjects().find(object => object.name === 'clip');
@@ -48,6 +50,21 @@ export const buildEditor = ({
   };
 
   return {
+    onCopy: () => copy(),
+    onPaste: () => paste(),
+
+    enableDrawingMode: () => {
+      canvas.discardActiveObject();
+      canvas.renderAll();
+      canvas.isDrawingMode = true;
+      canvas.freeDrawingBrush.width = strokeWidth;
+      canvas.freeDrawingBrush.color = strokeColor;
+    },
+
+    disableDrawingMode: () => {
+      canvas.isDrawingMode = false;
+    },
+
     bringForward: () => {
       canvas.getActiveObjects().forEach(object => {
         canvas.bringForward(object);
@@ -102,6 +119,7 @@ export const buildEditor = ({
         }
         object.set('stroke', value);
       });
+      canvas.freeDrawingBrush.color = value;
       canvas.renderAll();
     },
 
@@ -110,6 +128,7 @@ export const buildEditor = ({
       canvas.getActiveObjects().forEach(object => {
         object.set('strokeWidth', value);
       });
+      canvas.freeDrawingBrush.width = value;
       canvas.renderAll();
     },
 
@@ -182,10 +201,40 @@ export const buildEditor = ({
       canvas.renderAll();
     },
 
+    changeImageFilter: value => {
+      const objects = canvas.getActiveObjects();
+      objects.forEach(object => {
+        if (object.type === 'image') {
+          const imageObject = object as fabric.Image;
+
+          const effect = createFilter(value);
+
+          imageObject.filters = effect ? [effect] : [];
+          imageObject.applyFilters();
+          canvas.renderAll();
+        }
+      });
+    },
+
     delete: () => {
       canvas.getActiveObjects().forEach(object => canvas.remove(object));
       canvas.discardActiveObject();
       canvas.renderAll();
+    },
+
+    addImage: value => {
+      fabric.Image.fromURL(
+        value,
+        image => {
+          const workspace = getWorkspace();
+
+          image.scaleToWidth(workspace?.width || 0);
+          image.scaleToHeight(workspace?.height || 0);
+
+          addToCanvas(image);
+        },
+        { crossOrigin: 'anonymous' }
+      );
     },
 
     addText: (value, options) => {
