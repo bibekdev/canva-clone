@@ -2,6 +2,27 @@ import { Dispatch, SetStateAction } from 'react';
 import { ITextboxOptions } from 'fabric/fabric-impl';
 import * as material from 'material-colors';
 
+export const fonts = [
+  'Arial',
+  'Arial Black',
+  'Verdana',
+  'Helvetica',
+  'Tahoma',
+  'Trebuchet MS',
+  'Times New Roman',
+  'Georgia',
+  'Garamond',
+  'Courier New',
+  'Brush Script MT',
+  'Palatino',
+  'Bookman',
+  'Comic Sans MS',
+  'Impact',
+  'Lucida Sans Unicode',
+  'Geneva',
+  'Lucida Console'
+];
+
 export type ActiveTool =
   | 'select'
   | 'shapes'
@@ -39,6 +60,16 @@ export const colors = [
   material.brown['500'],
   material.blueGrey['500'],
   'transparent'
+];
+
+export const selectionDependentTools = [
+  'fill',
+  'font',
+  'filter',
+  'opacity',
+  'remove-bg',
+  'stroke-color',
+  'stroke-width'
 ];
 
 export const FILL_COLOR = 'rgba(0,0,0,1)';
@@ -100,6 +131,18 @@ export const TEXT_OPTIONS = {
   fontFamily: FONT_FAMILY
 };
 
+export interface EditorHookProps {
+  // defaultState?: string;
+  // defaultWidth?: number;
+  // defaultHeight?: number;
+  clearSelectionCallback?: () => void;
+  // saveCallback?: (values: {
+  //   json: string;
+  //   height: number;
+  //   width: number;
+  // }) => void;
+}
+
 export type BuildEditorProps = {
   // undo: () => void;
   // redo: () => void;
@@ -113,14 +156,14 @@ export type BuildEditorProps = {
   fillColor: string;
   strokeColor: string;
   strokeWidth: number;
-  // selectedObjects: fabric.Object[];
-  // strokeDashArray: number[];
-  // fontFamily: string;
-  // setStrokeDashArray: (value: number[]) => void;
+  selectedObjects: fabric.Object[];
+  strokeDashArray: number[];
+  fontFamily: string;
+  setStrokeDashArray: (value: number[]) => void;
   setFillColor: Dispatch<SetStateAction<string>>;
   setStrokeColor: Dispatch<SetStateAction<string>>;
   setStrokeWidth: Dispatch<SetStateAction<number>>;
-  // setFontFamily: Dispatch<SetStateAction<string>>;
+  setFontFamily: Dispatch<SetStateAction<string>>;
 };
 
 export interface Editor {
@@ -145,30 +188,30 @@ export interface Editor {
   // onPaste: () => void;
   // changeImageFilter: (value: string) => void;
   // addImage: (value: string) => void;
-  // delete: () => void;
-  // changeFontSize: (value: number) => void;
-  // getActiveFontSize: () => number;
-  // changeTextAlign: (value: string) => void;
-  // getActiveTextAlign: () => string;
-  // changeFontUnderline: (value: boolean) => void;
-  // getActiveFontUnderline: () => boolean;
-  // changeFontLinethrough: (value: boolean) => void;
-  // getActiveFontLinethrough: () => boolean;
-  // changeFontStyle: (value: string) => void;
-  // getActiveFontStyle: () => string;
-  // changeFontWeight: (value: number) => void;
-  // getActiveFontWeight: () => number;
-  // getActiveFontFamily: () => string;
-  // changeFontFamily: (value: string) => void;
-  // addText: (value: string, options?: ITextboxOptions) => void;
-  // getActiveOpacity: () => number;
-  // changeOpacity: (value: number) => void;
-  // bringForward: () => void;
-  // sendBackwards: () => void;
+  delete: () => void;
+  changeFontSize: (value: number) => void;
+  getActiveFontSize: () => number;
+  changeTextAlign: (value: string) => void;
+  getActiveTextAlign: () => string;
+  changeFontUnderline: (value: boolean) => void;
+  getActiveFontUnderline: () => boolean;
+  changeFontLinethrough: (value: boolean) => void;
+  getActiveFontLinethrough: () => boolean;
+  changeFontStyle: (value: string) => void;
+  getActiveFontStyle: () => string;
+  changeFontWeight: (value: number) => void;
+  getActiveFontWeight: () => number;
+  getActiveFontFamily: () => string;
+  changeFontFamily: (value: string) => void;
+  addText: (value: string, options?: ITextboxOptions) => void;
+  getActiveOpacity: () => number;
+  changeOpacity: (value: number) => void;
+  bringForward: () => void;
+  sendBackwards: () => void;
   changeStrokeWidth: (value: number) => void;
   changeFillColor: (value: string) => void;
   changeStrokeColor: (value: string) => void;
-  // changeStrokeDashArray: (value: number[]) => void;
+  changeStrokeDashArray: (value: number[]) => void;
   addCircle: () => void;
   addSoftRectangle: () => void;
   addRectangle: () => void;
@@ -179,6 +222,6 @@ export interface Editor {
   getActiveFillColor: () => string;
   getActiveStrokeColor: () => string;
   getActiveStrokeWidth: () => number;
-  // getActiveStrokeDashArray: () => number[];
-  // selectedObjects: fabric.Object[];
+  getActiveStrokeDashArray: () => number[];
+  selectedObjects: fabric.Object[];
 }

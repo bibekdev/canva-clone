@@ -4,11 +4,18 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { fabric } from 'fabric';
 
 import { useEditor } from '@/hooks';
-import { ActiveTool } from '@/lib/types';
-import { Footer } from './footer';
-import { Navbar } from './navbar';
+import { ActiveTool, selectionDependentTools } from '@/lib/types';
+import FillColorSidebar from './sidebar/fill-color-sidebar';
+import { FontSidebar } from './sidebar/font-sidebar';
+import { ImageSidebar } from './sidebar/image-sidebar';
+import { OpacitySidebar } from './sidebar/opacity-sidebar';
 import { ShapeSidebar } from './sidebar/shape-sidebar';
 import { Sidebar } from './sidebar/sidebar';
+import { StrokeColorSidebar } from './sidebar/stroke-color-sidebar';
+import { StrokeWidthSidebar } from './sidebar/stroke-width-sidebar';
+import { TextSidebar } from './sidebar/text-sidebar';
+import { Footer } from './footer';
+import { Navbar } from './navbar';
 import { Toolbar } from './toolbar';
 
 export function Editor() {
@@ -16,7 +23,15 @@ export function Editor() {
   const canvasRef = useRef(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  const { init, editor } = useEditor();
+  const onClearSelection = useCallback(() => {
+    if (selectionDependentTools.includes(activeTool)) {
+      setActiveTool('select');
+    }
+  }, [activeTool]);
+
+  const { init, editor } = useEditor({
+    clearSelectionCallback: onClearSelection
+  });
 
   const onChangeActiveTool = useCallback(
     (tool: ActiveTool) => {
@@ -53,6 +68,41 @@ export function Editor() {
           onChangeActiveTool={onChangeActiveTool}
         />
         <ShapeSidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={onChangeActiveTool}
+        />
+        <FillColorSidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={onChangeActiveTool}
+        />
+        <StrokeColorSidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={onChangeActiveTool}
+        />
+        <StrokeWidthSidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={onChangeActiveTool}
+        />
+        <OpacitySidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={onChangeActiveTool}
+        />
+        <TextSidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={onChangeActiveTool}
+        />
+        <FontSidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={onChangeActiveTool}
+        />
+        <ImageSidebar
           editor={editor}
           activeTool={activeTool}
           onChangeActiveTool={onChangeActiveTool}

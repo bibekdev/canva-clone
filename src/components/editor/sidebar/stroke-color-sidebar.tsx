@@ -1,45 +1,40 @@
-import { useMemo } from 'react';
-
 import { ColorPicker } from '@/components/editor/color-picker';
 import { ToolSidebarClose } from '@/components/editor/tool-sidebar-close';
 import { ToolSidebarHeader } from '@/components/editor/tool-sidebar-header';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { ActiveTool, Editor, FILL_COLOR } from '@/lib/types';
+import { ActiveTool, Editor, STROKE_COLOR } from '@/lib/types';
 import { cn } from '@/lib/utils';
 
-type Props = {
+interface StrokeColorSidebarProps {
   editor: Editor | undefined;
   activeTool: ActiveTool;
   onChangeActiveTool: (tool: ActiveTool) => void;
-};
+}
 
-export default function FillColorSidebar({
+export const StrokeColorSidebar = ({
   editor,
   activeTool,
   onChangeActiveTool
-}: Props) {
-  const value = useMemo(
-    () => editor?.getActiveFillColor() || FILL_COLOR,
-    [editor]
-  );
+}: StrokeColorSidebarProps) => {
+  const value = editor?.getActiveStrokeColor() || STROKE_COLOR;
 
   const onClose = () => {
     onChangeActiveTool('select');
   };
 
   const onChange = (value: string) => {
-    editor?.changeFillColor(value);
+    editor?.changeStrokeColor(value);
   };
 
   return (
     <aside
       className={cn(
         'relative z-[40] flex h-full w-[360px] flex-col border-r bg-card',
-        activeTool === 'fill' ? 'visible' : 'hidden'
+        activeTool === 'stroke-color' ? 'visible' : 'hidden'
       )}>
       <ToolSidebarHeader
-        title='Fill color'
-        description='Add fill color to your element'
+        title='Stroke color'
+        description='Add stroke color to your element'
       />
       <ScrollArea>
         <div className='space-y-6 p-4'>
@@ -49,4 +44,4 @@ export default function FillColorSidebar({
       <ToolSidebarClose onClick={onClose} />
     </aside>
   );
-}
+};

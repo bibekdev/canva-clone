@@ -1,16 +1,16 @@
-import { fabric } from 'fabric';
 import { Dispatch, SetStateAction, useEffect } from 'react';
+import { fabric } from 'fabric';
 
 type Props = {
   canvas: fabric.Canvas | null;
-  container: HTMLDivElement | null;
   setSelectedObjects: Dispatch<SetStateAction<fabric.Object[]>>;
+  clearSelectionCallback?: () => void;
 };
 
 export const useCanvasEvents = ({
   canvas,
-  container,
-  setSelectedObjects
+  setSelectedObjects,
+  clearSelectionCallback
 }: Props) => {
   useEffect(() => {
     if (canvas) {
@@ -24,6 +24,7 @@ export const useCanvasEvents = ({
 
       canvas.on('selection:cleared', () => {
         setSelectedObjects([]);
+        clearSelectionCallback?.();
       });
     }
 
@@ -34,5 +35,5 @@ export const useCanvasEvents = ({
         canvas.off('selection:cleared');
       }
     };
-  }, [canvas]);
+  }, [canvas, clearSelectionCallback]);
 };

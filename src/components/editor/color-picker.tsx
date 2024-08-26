@@ -1,6 +1,7 @@
+import { ChromePicker, CirclePicker } from 'react-color';
+
 import { colors } from '@/lib/types';
 import { rgbaObjectToString } from '@/lib/utils';
-import { ChromePicker, CirclePicker } from 'react-color';
 
 type Props = {
   value: string;
