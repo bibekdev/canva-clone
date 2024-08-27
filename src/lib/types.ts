@@ -183,10 +183,10 @@ export interface EditorHookProps {
 export type BuildEditorProps = {
   // undo: () => void;
   // redo: () => void;
-  // save: (skip?: boolean) => void;
+  save: (skip?: boolean) => void;
   // canUndo: () => boolean;
   // canRedo: () => boolean;
-  // autoZoom: () => void;
+  autoZoom: () => void;
   copy: () => void;
   paste: () => void;
   canvas: fabric.Canvas;
@@ -204,21 +204,21 @@ export type BuildEditorProps = {
 };
 
 export interface Editor {
-  // savePng: () => void;
-  // saveJpg: () => void;
-  // saveSvg: () => void;
-  // saveJson: () => void;
-  // loadJson: (json: string) => void;
+  savePng: () => void;
+  saveJpg: () => void;
+  saveSvg: () => void;
+  saveJson: () => void;
+  loadJson: (json: string) => void;
   // onUndo: () => void;
   // onRedo: () => void;
   // canUndo: () => boolean;
   // canRedo: () => boolean;
-  // autoZoom: () => void;
-  // zoomIn: () => void;
-  // zoomOut: () => void;
-  // getWorkspace: () => fabric.Object | undefined;
-  // changeBackground: (value: string) => void;
-  // changeSize: (value: { width: number; height: number }) => void;
+  autoZoom: () => void;
+  zoomIn: () => void;
+  zoomOut: () => void;
+  getWorkspace: () => fabric.Object | undefined;
+  changeBackground: (value: string) => void;
+  changeSize: (value: { width: number; height: number }) => void;
   enableDrawingMode: () => void;
   disableDrawingMode: () => void;
   onCopy: () => void;

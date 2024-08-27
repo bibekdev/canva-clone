@@ -11,6 +11,7 @@ import { FilterSidebar } from './sidebar/filter-sidebar';
 import { FontSidebar } from './sidebar/font-sidebar';
 import { ImageSidebar } from './sidebar/image-sidebar';
 import { OpacitySidebar } from './sidebar/opacity-sidebar';
+import { SettingsSidebar } from './sidebar/settings-sidebar';
 import { ShapeSidebar } from './sidebar/shape-sidebar';
 import { Sidebar } from './sidebar/sidebar';
 import { StrokeColorSidebar } from './sidebar/stroke-color-sidebar';
@@ -127,6 +128,11 @@ export function Editor() {
           activeTool={activeTool}
           onChangeActiveTool={onChangeActiveTool}
         />
+        <SettingsSidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={onChangeActiveTool}
+        />
         <main className='relative flex flex-1 flex-col overflow-auto'>
           <Toolbar
             editor={editor}
@@ -138,7 +144,7 @@ export function Editor() {
             <canvas ref={canvasRef} />
           </div>
 
-          <Footer />
+          <Footer editor={editor} />
         </main>
       </div>
     </div>

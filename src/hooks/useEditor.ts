@@ -28,13 +28,14 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
     useState<number[]>(STROKE_DASH_ARRAY);
   const [fontFamily, setFontFamily] = useState<string>(FONT_FAMILY);
 
-  useAutoResize({ container, canvas });
+  const { autoZoom } = useAutoResize({ container, canvas });
 
   const { copy, paste } = useClipboard({ canvas });
 
   const editor = useMemo(() => {
     if (canvas) {
       return buildEditor({
+        autoZoom,
         copy,
         paste,
         canvas,
@@ -61,7 +62,8 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
     strokeDashArray,
     copy,
     paste,
-    fontFamily
+    fontFamily,
+    autoZoom
   ]);
 
   useCanvasEvents({
