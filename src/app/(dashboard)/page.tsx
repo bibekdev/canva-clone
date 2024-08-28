@@ -1,15 +1,22 @@
-export default function DashboardPage({
-  children
-}: {
-  children: React.ReactNode;
-}) {
+import { redirect } from 'next/navigation';
+
+import { auth } from '@/auth';
+import { Banner } from './banner';
+import { ProjectsSection } from './projects-section';
+import { TemplatesSection } from './template-section';
+
+export default async function Home() {
+  const session = await auth();
+
+  if (!session) {
+    redirect('/api/auth/signin');
+  }
+
   return (
-    <div className='h-full'>
-      <Sidebar />
-      <div className='flex h-full flex-col lg:pl-[300px]'>
-        <Navbar />
-        <main className='bg-card'>{children}</main>
-      </div>
+    <div className='mx-auto flex max-w-screen-xl flex-col space-y-6 pb-10'>
+      <Banner />
+      <TemplatesSection />
+      <ProjectsSection />
     </div>
   );
 }

@@ -3,18 +3,17 @@
 import { usePathname } from 'next/navigation';
 import { CreditCard, Crown, Home, MessageCircleQuestion } from 'lucide-react';
 
+import { useBilling } from '@/actions/subscriptions/use-billing';
+import { useCheckout } from '@/actions/subscriptions/use-checkout';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { useBilling } from '@/features/subscriptions/api/use-billing';
-import { useCheckout } from '@/features/subscriptions/api/use-checkout';
-import { usePaywall } from '@/features/subscriptions/hooks/use-paywall';
+import { usePaywall } from '@/hooks';
 import { SidebarItem } from './sidebar-item';
 
 export const SidebarRoutes = () => {
   const mutation = useCheckout();
   const billingMutation = useBilling();
   const { shouldBlock, isLoading, triggerPaywall } = usePaywall();
-
   const pathname = usePathname();
 
   const onClick = () => {
@@ -65,7 +64,7 @@ export const SidebarRoutes = () => {
           onClick={onClick}
         />
         <SidebarItem
-          href='mailto:support@codewithantonio.com'
+          href='mailto:bibek9587@gmail.com'
           icon={MessageCircleQuestion}
           label='Get Help'
         />

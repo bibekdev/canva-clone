@@ -35,7 +35,11 @@ export const buildEditor = ({
   copy,
   paste,
   autoZoom,
-  save
+  save,
+  canRedo,
+  canUndo,
+  redo,
+  undo
 }: BuildEditorProps): Editor => {
   const generateSaveOptions = () => {
     const { width, height, left, top } = getWorkspace() as fabric.Rect;
@@ -129,7 +133,10 @@ export const buildEditor = ({
     getWorkspace,
     onCopy: () => copy(),
     onPaste: () => paste(),
-
+    onRedo: () => redo(),
+    canRedo: () => canRedo(),
+    onUndo: () => undo(),
+    canUndo: () => canUndo(),
     zoomIn: () => {
       let zoomRatio = canvas.getZoom();
       zoomRatio += 0.05;

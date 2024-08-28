@@ -2,7 +2,10 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { fabric } from 'fabric';
+import debounce from 'lodash.debounce';
 
+import { ResponseType } from '@/actions/projects/use-get-project';
+import { useUpdateProject } from '@/actions/projects/use-update-project';
 import { useEditor } from '@/hooks';
 import { ActiveTool, selectionDependentTools } from '@/lib/types';
 import { DrawSidebar } from './sidebar/draw-sidebar';
@@ -21,7 +24,21 @@ import { Footer } from './footer';
 import { Navbar } from './navbar';
 import { Toolbar } from './toolbar';
 
-export function Editor() {
+type Props = {
+  initialData: ResponseType['data'];
+};
+
+export function Editor({ initialData }: Props) {
+  const { mutate } = useUpdateProject(initialData.id);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const debouncedSave = useCallback(
+    debounce((values: { json: string; height: number; width: number }) => {
+      mutate(values);
+    }, 500),
+    [mutate]
+  );
+
   const [activeTool, setActiveTool] = useState<ActiveTool>('select');
   const canvasRef = useRef(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -33,7 +50,11 @@ export function Editor() {
   }, [activeTool]);
 
   const { init, editor } = useEditor({
-    clearSelectionCallback: onClearSelection
+    defaultState: initialData.json,
+    defaultWidth: initialData.width,
+    defaultHeight: initialData.height,
+    clearSelectionCallback: onClearSelection,
+    saveCallback: debouncedSave
   });
 
   const onChangeActiveTool = useCallback(
@@ -72,7 +93,12 @@ export function Editor() {
 
   return (
     <div className='flex h-full flex-col'>
-      <Navbar activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
+      <Navbar
+        id={initialData.id}
+        editor={editor}
+        activeTool={activeTool}
+        onChangeActiveTool={onChangeActiveTool}
+      />
       <div className='absolute top-[68px] flex h-[calc(100%-68px)] w-full'>
         <Sidebar
           activeTool={activeTool}

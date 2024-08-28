@@ -4,9 +4,25 @@ import { type RGBColor } from 'react-color';
 import { twMerge } from 'tailwind-merge';
 import { uuid } from 'uuidv4';
 
+import { subscriptions } from '@/db/schema';
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
+const DAY_IN_MS = 86_400_000;
+
+export const checkIsActive = (
+  subscription: typeof subscriptions.$inferSelect
+) => {
+  let active = false;
+
+  if (subscription && subscription.priceId && subscription.currentPeriodEnd) {
+    active = subscription.currentPeriodEnd.getTime() + DAY_IN_MS > Date.now();
+  }
+
+  return active;
+};
 
 export function transformText(objects: any) {
   if (!objects) return;
